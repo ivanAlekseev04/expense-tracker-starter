@@ -94,7 +94,7 @@ function App() {
     return (
         <div className="app">
             <h1>Finance Tracker</h1>
-            <p className="subtitle">Track your income and expenses 😊</p>
+            <p className="subtitle">Track your income and expenses</p>
 
             <Summary transactions={transactions} />
             <SpendingChart transactions={transactions} />
