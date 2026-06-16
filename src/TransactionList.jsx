@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
-export default function TransactionList({ transactions, categories }) {
+export default function TransactionList({ transactions, categories, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   let filtered = transactions;
   if (filterType !== "all") {
@@ -36,6 +37,7 @@ export default function TransactionList({ transactions, categories }) {
             <th>Description</th>
             <th>Category</th>
             <th>Amount</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -47,10 +49,24 @@ export default function TransactionList({ transactions, categories }) {
               <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
                 {t.type === "income" ? "+" : "-"}${t.amount}
               </td>
+              <td>
+                <button className="delete-btn" onClick={() => setPendingDeleteId(t.id)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {pendingDeleteId !== null && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Delete "{transactions.find(t => t.id === pendingDeleteId)?.description}"?</p>
+            <div className="modal-actions">
+              <button onClick={() => { onDelete(pendingDeleteId); setPendingDeleteId(null); }}>Confirm</button>
+              <button onClick={() => setPendingDeleteId(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
